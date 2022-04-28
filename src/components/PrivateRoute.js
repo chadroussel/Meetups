@@ -1,11 +1,10 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-
+import { useAuthState } from "../firebase";
 import Layout from "../components/layout/Layout";
 
 const PrivateWrapper = ({ children }) => {
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuthState();
   return currentUser ? <Layout>{children}</Layout> : <Navigate to="/login" />;
 };
 

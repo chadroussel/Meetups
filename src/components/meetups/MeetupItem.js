@@ -2,7 +2,7 @@ import { useContext } from "react";
 import Button from "react-bootstrap/Button";
 
 import { useNavigate } from "react-router-dom";
-import { db } from "../../firebase";
+import firestore from "../../firebase";
 import { doc, deleteDoc } from "firebase/firestore";
 
 import Card from "../ui/Card";
@@ -19,7 +19,7 @@ function MeetupItem(props) {
 
   const deleteMeetupHandler = async () => {
     console.log(props.id);
-    const taskDocRef = doc(db, "meetups", props.id);
+    const taskDocRef = doc(firestore, "meetups", props.id);
     try {
       await deleteDoc(taskDocRef);
       window.location.reload(false);

@@ -1,12 +1,13 @@
 import React, { useRef, useState } from "react";
+import { getAuth } from "firebase/auth";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { sendPasswordResetEmail } from "firebase/auth";
 
 export default function ForgotPassword() {
   const emailRef = useRef();
 
-  const { resetPassword } = useAuth();
+  const authentication = getAuth();
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,7 @@ export default function ForgotPassword() {
       setMessage("/");
       setError("");
       setLoading(true);
-      await resetPassword(emailRef.current.value);
+      await sendPasswordResetEmail(authentication, emailRef.current.value);
       setMessage("Check your email!");
     } catch {
       setError("Failed to reset password");

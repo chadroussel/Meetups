@@ -1,15 +1,18 @@
 import { useNavigate } from "react-router-dom";
-import { db } from "../firebase";
+import firestore from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
+import { useAuthState } from "../firebase";
 
 import NewMeetupForm from "../components/meetups/NewMeetupForm";
 
 function NewMeetupsPage() {
+  const { currentUser } = useAuthState();
   const navigate = useNavigate();
 
   const addMeetupHandler = async (meetupData) => {
     try {
-      await addDoc(collection(db, "meetups"), {
+      await addDoc(collection(firestore, "meetups"), {
+        user: currentUser.uid,
         title: meetupData.title,
         image: meetupData.image,
         address: meetupData.address,
@@ -20,6 +23,8 @@ function NewMeetupsPage() {
       console.log(err);
     }
   };
+
+  console.log(currentUser.uid);
 
   return (
     <section>

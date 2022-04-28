@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { db } from "../firebase";
+import firestore, { useAuthState } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 
 import MeetupList from "../components/meetups/MeetupList";
@@ -25,18 +25,23 @@ import Dashboard from "../components/Dashboard";
 // ];
 
 function AllMeetupsPage() {
+  const { currentUser } = useAuthState();
   const [isLoading, setIsLoading] = useState(true);
   const [loadedMeetups, setLoadedMeetups] = useState([]);
 
   useEffect(() => {
+    console.log("I'm Here");
     setIsLoading(true);
 
-    getDocs(collection(db, "meetups"))
+    getDocs(collection(firestore, "meetups"))
       .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          let item = { id: doc.id, data: doc.data() };
-          setLoadedMeetups((arr) => [...arr, item]);
-        });
+        const userId = currentUser.uid;
+        querySnapshot.docs
+          .filter((doc) => doc.data().user === userId)
+          .forEach((doc) => {
+            let item = { id: doc.id, data: doc.data() };
+            setLoadedMeetups((arr) => [...arr, item]);
+          });
       })
       .catch((err) => {
         console.error("Failed to retrieve data", err);

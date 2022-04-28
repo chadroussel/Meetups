@@ -1,13 +1,13 @@
 import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
-import { useAuth } from "../context/AuthContext";
+import { getAuth, updateEmail, updatePassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function UpdateProfile() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const { currentUser, updateEmail, updatePassword } = useAuth();
+  const { currentUser } = getAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ export default function UpdateProfile() {
       promises.push(updateEmail(emailRef.current.value));
     }
     if (passwordConfirmRef.current.value) {
-      promises.push(updatePassword(passwordRef.current.value));
+      promises.push(updatePassword(currentUser, passwordRef.current.value));
     }
 
     Promise.all(promises)
@@ -58,7 +58,7 @@ export default function UpdateProfile() {
                 defaultValue={currentUser.email}
               />
             </Form.Group>
-            <Form.Group id="password">
+            <Form.Group id="password" data-testid="pword">
               <Form.Label>Password</Form.Label>
               <Form.Control
                 type="password"

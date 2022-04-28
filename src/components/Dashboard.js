@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { Card, Button, Alert } from "react-bootstrap";
-import { useAuth } from "../context/AuthContext";
+import { getAuth, signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuthState } from "../firebase";
 
 export default function Dashboard() {
   const [error, setError] = useState("");
-  const { currentUser, logout } = useAuth();
+  const { currentUser } = useAuthState();
   const navigate = useNavigate();
 
   async function handleLogout() {
     setError("");
 
     try {
-      await logout();
+      await signOut(getAuth());
       sessionStorage.removeItem("token");
       navigate("/login");
     } catch {

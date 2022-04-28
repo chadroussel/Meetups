@@ -1,12 +1,16 @@
 import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  // createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { login } = useAuth();
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -17,7 +21,12 @@ export default function Login() {
     try {
       setError("");
       setLoading(true);
-      await login(emailRef.current.value, passwordRef.current.value);
+      const authentication = getAuth();
+      await signInWithEmailAndPassword(
+        authentication,
+        emailRef.current.value,
+        passwordRef.current.value
+      );
       navigate("/");
     } catch {
       setError("Failed to log in");
@@ -43,7 +52,12 @@ export default function Login() {
               <Form.Control type="password" ref={passwordRef} required />
             </Form.Group>
             <div className="w-100 mt-2">
-              <Button disabled={loading} className="w-100" type="submit">
+              <Button
+                disabled={loading}
+                className="w-100"
+                type="submit"
+                title="logIn"
+              >
                 Log In
               </Button>
             </div>
