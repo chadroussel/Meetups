@@ -30,6 +30,7 @@ function AllMeetupsPage() {
   const [loadedMeetups, setLoadedMeetups] = useState([]);
 
   useEffect(() => {
+    // await
     console.log("I'm Here");
     setIsLoading(true);
 
