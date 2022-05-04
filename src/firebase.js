@@ -40,19 +40,20 @@ export const AuthContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      // const idTokenResult = await user?.getIdTokenResult(true)
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         setCurrentUser(user);
-        setLoading(false);
-        // ...
       } else {
-        console.log("user logged out");
         setCurrentUser({});
-        // User is signed out
-        // ...
       }
+
+      setLoading(false);
+
       unsubscribe();
     });
     // const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -78,3 +79,21 @@ export const AuthContextProvider = ({ children }) => {
   );
 };
 export default firestore;
+
+// const AuthContext = React.createContext();
+// export function useAuth() {
+//   return useContext(AuthContext);
+// }
+
+// // singout function
+// async function logout() {
+//   return signOut(auth);
+// }
+
+// // values for when we use "const { value } = useAuth();"
+// const value = {
+//   currentUser,
+//   login,
+//   signup,
+//   logout,
+// };
