@@ -85,7 +85,7 @@ export default firestore;
 //   return useContext(AuthContext);
 // }
 
-// // singout function
+// // signout function
 // async function logout() {
 //   return signOut(auth);
 // }

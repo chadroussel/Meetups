@@ -28,6 +28,7 @@ export default function Login() {
         passwordRef.current.value
       );
       navigate("/");
+      // window.location.reload(false);
     } catch {
       setError("Failed to log in");
     }
